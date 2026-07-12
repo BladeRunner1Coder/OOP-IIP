@@ -15,23 +15,26 @@ class Student:
 Завершенные курсы: {", ".join(self.finished_courses)}'''
 
     def __eq__(self, other):
-        if not isinstance(other, Student):
+        if not isinstance(other, Student) or type(self.average()) is str or type(other.average()) is str:
             return 'Ошибка'
         return self.average() == other.average()
 
     def __gt__(self, other):
-        if not isinstance(other, Student):
+        if not isinstance(other, Student) or type(self.average()) is str or type(other.average()) is str:
             return 'Ошибка'
         return self.average() > other.average()
 
     def __lt__(self, other):
-        if not isinstance(other, Student):
+        if not isinstance(other, Student) or type(self.average()) is str or type(other.average()) is str:
             return 'Ошибка'
         return self.average() < other.average()
 
     def average(self):
         all_grades = [num for sublist in self.grades.values() for num in sublist]
-        return sum(all_grades) / len(all_grades)
+        if len(all_grades) > 0:
+            return sum(all_grades) / len(all_grades)
+        else:
+            return 'Оценки отсутствуют'
 
     def rate_lecture(self, lecturer, course, grade):
         if isinstance(lecturer, Lecturer) and course in lecturer.courses_attached and course in self.courses_in_progress:
@@ -64,24 +67,26 @@ class Lecturer(Mentor):
         return f'Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за лекции: {self.average()}'
 
     def __eq__(self, other):
-        if not isinstance(other, Lecturer):
+        if not isinstance(other, Lecturer) or type(self.average()) is str or type(other.average()) is str:
             return 'Ошибка'
         return self.average() == other.average()
 
     def __gt__(self, other):
-        if not isinstance(other, Lecturer):
+        if not isinstance(other, Lecturer) or type(self.average()) is str or type(other.average()) is str:
             return 'Ошибка'
         return self.average() > other.average()
 
     def __lt__(self, other):
-        if not isinstance(other, Lecturer):
+        if not isinstance(other, Lecturer) or type(self.average()) is str or type(other.average()) is str:
             return 'Ошибка'
         return self.average() < other.average()
 
     def average(self):
         all_grades = [num for sublist in self.grades.values() for num in sublist]
-        return sum(all_grades) / len(all_grades)
-
+        if len(all_grades) > 0:
+            return sum(all_grades) / len(all_grades)
+        else:
+            return 'Оценки отсутствуют'
 
 class Reviewer(Mentor):
     def __init__(self, name, surname):

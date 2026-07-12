@@ -15,23 +15,26 @@ class Student:
 Завершенные курсы: {", ".join(self.finished_courses)}'''
 
     def __eq__(self, other):
-        if not isinstance(other, Student):
+        if not isinstance(other, Student) or type(self.average()) is str or type(other.average()) is str:
             return 'Ошибка'
         return self.average() == other.average()
 
     def __gt__(self, other):
-        if not isinstance(other, Student):
+        if not isinstance(other, Student) or type(self.average()) is str or type(other.average()) is str:
             return 'Ошибка'
         return self.average() > other.average()
 
     def __lt__(self, other):
-        if not isinstance(other, Student):
+        if not isinstance(other, Student) or type(self.average()) is str or type(other.average()) is str:
             return 'Ошибка'
         return self.average() < other.average()
 
     def average(self):
         all_grades = [num for sublist in self.grades.values() for num in sublist]
-        return sum(all_grades) / len(all_grades)
+        if len(all_grades) > 0:
+            return sum(all_grades) / len(all_grades)
+        else:
+            return 'Оценки отсутствуют'
 
     def rate_lecture(self, lecturer, course, grade):
         if isinstance(lecturer, Lecturer) and course in lecturer.courses_attached and course in self.courses_in_progress:
@@ -64,24 +67,26 @@ class Lecturer(Mentor):
         return f'Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за лекции: {self.average()}'
 
     def __eq__(self, other):
-        if not isinstance(other, Lecturer):
+        if not isinstance(other, Lecturer) or type(self.average()) is str or type(other.average()) is str:
             return 'Ошибка'
         return self.average() == other.average()
 
     def __gt__(self, other):
-        if not isinstance(other, Lecturer):
+        if not isinstance(other, Lecturer) or type(self.average()) is str or type(other.average()) is str:
             return 'Ошибка'
         return self.average() > other.average()
 
     def __lt__(self, other):
-        if not isinstance(other, Lecturer):
+        if not isinstance(other, Lecturer) or type(self.average()) is str or type(other.average()) is str:
             return 'Ошибка'
         return self.average() < other.average()
 
     def average(self):
         all_grades = [num for sublist in self.grades.values() for num in sublist]
-        return sum(all_grades) / len(all_grades)
-
+        if len(all_grades) > 0:
+            return sum(all_grades) / len(all_grades)
+        else:
+            return 'Оценки отсутствуют'
 
 class Reviewer(Mentor):
     def __init__(self, name, surname):
@@ -145,17 +150,41 @@ def average_student_grade(student_list, course):
     for student in student_list:
         if course in student.grades:
             grade_list += student.grades[course]
-    return sum(grade_list) / len(grade_list)
+    if len(grade_list) > 0:
+        return sum(grade_list) / len(grade_list)
+    else:
+        return 'Оценки по этому курсу отсутствуют'
 
 def average_lecturer_grade(lecturer_list, course):
     grade_list = []
     for lecturer in lecturer_list:
         if course in lecturer.grades:
             grade_list += lecturer.grades[course]
-    return sum(grade_list) / len(grade_list)
+    if len(grade_list) > 0:
+        return sum(grade_list) / len(grade_list)
+    else:
+        return 'Оценки по этому курсу отсутствуют'
 
 student_list = [student1, student2]
 lecturer_list = [lecturer1, lecturer2]
 
 print(average_student_grade(student_list, 'Python'))
 print(average_lecturer_grade(lecturer_list, 'Python'))
+
+print(reviewer1.rate_hw(student1, 'Java', 8))
+print(student1.rate_lecture(lecturer1, 'Java', 8))
+
+student3 = Student('Maksim', 'Fedorov', 'M')
+print(student3)
+lecturer3 = Lecturer('Alla', 'Pankratova')
+print(lecturer3)
+print(student1 == student3)
+print(lecturer1 == lecturer3)
+print(student1 < student3)
+print(lecturer1 < lecturer3)
+print(student1 > student3)
+print(lecturer1 > lecturer3)
+student_list2 = [student3]
+lecturer_list2 = [lecturer3]
+print(average_student_grade(student_list2, 'Python'))
+print(average_lecturer_grade(lecturer_list2, 'Python'))
